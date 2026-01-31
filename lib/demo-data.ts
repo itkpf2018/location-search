@@ -95,13 +95,40 @@ const createDemoProducts = (count: number): Product[] => {
 
 export const DEMO_PRODUCTS: Product[] = createDemoProducts(79)
 
+const STORAGE_KEY = 'storage-location-finder-demo-products'
+
+const loadStoredProducts = (): Product[] => {
+    if (typeof window === 'undefined') {
+        return [...DEMO_PRODUCTS]
+    }
+
+    try {
+        const raw = window.localStorage.getItem(STORAGE_KEY)
+        if (!raw) {
+            return [...DEMO_PRODUCTS]
+        }
+        return JSON.parse(raw) as Product[]
+    } catch {
+        return [...DEMO_PRODUCTS]
+    }
+}
+
+const persistProducts = (products: Product[]) => {
+    if (typeof window === 'undefined') return
+    try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(products))
+    } catch {
+        /* ignore */
+    }
+}
+
 // Check if we're in demo mode (no Supabase configured)
 export const IS_DEMO_MODE =
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     process.env.NEXT_PUBLIC_SUPABASE_URL === 'your-project-url'
 
 // In-memory storage for demo mode
-let demoProductsState = [...DEMO_PRODUCTS]
+let demoProductsState = loadStoredProducts()
 
 export const demoStorage = {
     getAll: () => Promise.resolve([...demoProductsState]),
@@ -130,6 +157,7 @@ export const demoStorage = {
             updated_at: new Date().toISOString(),
         }
         demoProductsState.push(newProduct)
+        persistProducts(demoProductsState)
         return Promise.resolve(newProduct)
     },
 
@@ -142,16 +170,19 @@ export const demoStorage = {
             ...updates,
             updated_at: new Date().toISOString(),
         }
+        persistProducts(demoProductsState)
         return Promise.resolve(demoProductsState[index])
     },
 
     delete: (id: string) => {
         demoProductsState = demoProductsState.filter(p => p.id !== id)
+        persistProducts(demoProductsState)
         return Promise.resolve()
     },
 
     reset: () => {
         demoProductsState = [...DEMO_PRODUCTS]
+        persistProducts(demoProductsState)
         return Promise.resolve()
     },
 }

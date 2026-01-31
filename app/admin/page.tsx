@@ -44,6 +44,16 @@ export default function AdminPage() {
         fetchProducts()
     }, [fetchProducts])
 
+    useEffect(() => {
+        const body = document.body
+        const className = 'modal-open'
+        body.classList.toggle(className, isFormOpen)
+
+        return () => {
+            body.classList.remove(className)
+        }
+    }, [isFormOpen])
+
     const removeToast = (id: string) => {
         setToasts((prev) => prev.filter((toast) => toast.id !== id))
     }

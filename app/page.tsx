@@ -58,11 +58,10 @@ export default function HomePage() {
             if (categoryId) params.set('category', categoryId)
             const response = await apiFetch(`/api/search?${params.toString()}`)
             const data = await response.json()
-            setSearchResults(data.products || [])
-
-            // Auto-highlight first result
-            if (data.products && data.products.length > 0) {
-                setHighlightedProduct(data.products[0])
+            const fetched = data.products || []
+            setSearchResults(fetched)
+            if (fetched.length === 1) {
+                setHighlightedProduct(fetched[0])
             } else {
                 setHighlightedProduct(null)
             }

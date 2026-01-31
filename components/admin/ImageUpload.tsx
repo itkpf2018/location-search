@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -80,6 +80,10 @@ export function ImageUpload({ value, onChange, onUploadStart, onUploadEnd }: Ima
             fileInputRef.current.value = ''
         }
     }
+
+    useEffect(() => {
+        setPreview(value || null)
+    }, [value])
 
     return (
         <div className="space-y-2">

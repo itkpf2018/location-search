@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Camera, Tag, Plus } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
@@ -33,6 +33,7 @@ export function ProductForm({
         box_no: product?.box_no || 1,
         row_no: product?.row_no || 1,
         slot_no: product?.slot_no || 1,
+        product_code: product?.product_code || '',
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -89,6 +90,22 @@ export function ProductForm({
         setShowImageEditor(false)
         setCapturedImage(null)
     }
+
+    useEffect(() => {
+        setFormData({
+            name: product?.name || '',
+            image_url: product?.image_url || null,
+            box_no: product?.box_no || 1,
+            row_no: product?.row_no || 1,
+            slot_no: product?.slot_no || 1,
+            product_code: product?.product_code || '',
+        })
+        setError(null)
+        setCapturedImage(null)
+        setShowImageEditor(false)
+        setShowQRCode(false)
+        setShowCamera(false)
+    }, [product])
 
     return (
         <>
