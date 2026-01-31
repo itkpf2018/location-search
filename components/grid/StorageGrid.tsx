@@ -9,9 +9,10 @@ interface StorageGridProps {
     products: Product[]
     highlightedProduct?: Product | null
     onProductsUpdate: (products: Product[]) => void
+    onRequestModal?: (product: Product) => void
 }
 
-export function StorageGrid({ products, highlightedProduct, onProductsUpdate }: StorageGridProps) {
+export function StorageGrid({ products, highlightedProduct, onProductsUpdate, onRequestModal }: StorageGridProps) {
     const { config } = useGridConfig()
     // We pass the FULL products list to DraggableGrid because it filters internally by boxNo
     // This allows it to manage state updates correctly across the whole dataset if we ever support cross-box dragging
@@ -33,6 +34,7 @@ export function StorageGrid({ products, highlightedProduct, onProductsUpdate }: 
                             products={products}
                             onProductsUpdate={onProductsUpdate}
                             highlightedProductId={highlightedProduct?.id}
+                            onRequestModal={onRequestModal}
                         />
                     </div>
                 )

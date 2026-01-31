@@ -3,15 +3,15 @@ import type { Product } from './types'
 import type { Category } from './types-advanced'
 import { GRID_CONFIG } from './constants'
 
-const TOOLS_AND_AUTO_ITEMS = [
-    'Claw Hammer', 'Screwdriver Set', 'Adjustable Wrench', 'Pliers', 'Power Drill', 'Hand Saw', 'Tape Measure', 'Spirit Level', 'Utility Knife', 'Allen Key Set',
-    'Socket Wrench', 'Pipe Wrench', 'Wire Stripper', 'Hacksaw', 'Wood Chisel', 'Metal File', 'C-Clamp', 'Vise Grip', 'Rubber Mallet', 'Hand Axe',
-    'Engine Oil 5W30', 'Synthetic Oil', 'Brake Fluid', 'Transmission Fluid', 'Steering Fluid', 'Car Tire', 'Offroad Tire', 'Inner Tube', 'Car Battery', 'Spark Plug',
-    'Air Filter', 'Oil Filter', 'Fuel Filter', 'Brake Pads', 'Brake Disc', 'Shock Absorber', 'Wiper Blade', 'Headlight Bulb', 'Car Fuse', 'Hydraulic Jack',
-    'Jumper Cables', 'Tire Gauge', 'Air Compressor', 'Car Polisher', 'Car Shampoo', 'Microfiber Cloth', 'Wash Sponge', 'Plastic Bucket', 'Safety Glasses', 'Work Gloves',
-    'Safety Helmet', 'Ear Protection', 'Dust Mask', 'Safety Vest', 'Safety Boots', 'Metal Toolbox', 'Tool Bag', 'Extension Cord', 'Power Strip', 'LED Flashlight',
-    'Work Light', 'Aluminum Ladder', 'Step Stool', 'Wheelbarrow', 'Garden Shovel', 'Leaf Rake', 'Garden Hose', 'Paint Brush', 'Paint Roller', 'Masking Tape',
-    'Duct Tape', 'Electrical Tape', 'Super Glue', 'Silicone Sealant', 'Lubricant Spray', 'Rust Remover', 'Sandpaper', 'Steel Wool', 'Cable Ties'
+    const TOOLS_AND_AUTO_ITEMS = [
+    'ค้อนปอนด์', 'ชุดไขควง', 'ประแจเลื่อน', 'คีม', 'สว่านไฟฟ้า', 'เลื่อยมือ', 'เทปวัด', 'ระดับน้ำ', 'มีดอเนกประสงค์', 'ชุดแอลเลน',
+    'ประแจบ็อกซ์', 'ประแจท่อ', 'ตัดสายไฟ', 'เลื่อยฉลุ', 'สิ่วไม้', 'ตะไบโลหะ', 'ซีกแคลมป์', 'มือจับจักร', 'ค้อนยาง', 'ขวานเล็ก',
+    'น้ำมันเครื่อง 5W30', 'น้ำมันสังเคราะห์', 'น้ำมันเบรค', 'น้ำมันเกียร์', 'น้ำมันพวงมาลัย', 'ยางรถยนต์', 'ยางลุย', 'ยางใน', 'แบตเตอรี่รถยนต์', 'หัวเทียน',
+    'แผ่นกรองอากาศ', 'แผ่นกรองน้ำมัน', 'แผ่นกรองเชื้อเพลิง', 'ผ้าเบรค', 'ดิสก์เบรค', 'โช้คอัพ', 'ปัดน้ำฝน', 'หลอดไฟหน้า', 'ฟิวส์รถยนต์', 'แม่แรงไฮดรอลิก',
+    'สายพ่วงแบต', 'เกจ์วัดลม', 'ปั๊มลม', 'เครื่องขัดรถ', 'แชมพูรถ', 'ผ้าไมโครไฟเบอร์', 'ฟองน้ำล้าง', 'ถังพลาสติก', 'แว่นตานิรภัย', 'ถุงมือช่าง',
+    'หมวกนิรภัย', 'ที่ครอบหู', 'หน้ากากกันฝุ่น', 'เสื้อสะท้อนแสง', 'รองเท้านิรภัย', 'กล่องเครื่องมือเหล็ก', 'กระเป๋าเครื่องมือ', 'สายยาวต่อ', 'ปลั๊กพ่วง', 'ไฟฉาย LED',
+    'ไฟส่องงาน', 'บันไดอะลูมิเนียม', 'เก้าอี้เตี้ย', 'รถเข็น', 'เสียมสวน', 'คราดใบไม้', 'สายยางสวน', 'แปรงทาสี', 'ลูกกลิ้งทาสี', 'เทปกาว',
+    'เทปท่อ', 'เทปไฟฟ้า', 'กาวทันตแพทย์', 'ซิลิโคนซีล', 'สเปรย์หล่อลื่น', 'น้ำยาขจัดสนิม', 'กระดาษทราย', 'ฝ้ายขัด', 'สายรัดเคเบิล'
 ]
 
 export const DEMO_CATEGORIES: Category[] = [
@@ -33,6 +33,29 @@ export const inferCategoryIdFromName = (name: string): string | null => {
     if (/(belt|gear|coupling|shaft|chain|sprocket)/.test(lower)) return 'cat-4'
     return 'cat-5'
 }
+
+const DEMO_IMAGE_POOL = [
+    'bearing.png',
+    'hydraulic-pump.png',
+    'motor-controller.png',
+    'pressure-sensor.png',
+    'valve-assembly.png',
+    'gear-box.png',
+    'belt-drive.png',
+    'chain-sprocket.png',
+    'coupling.png',
+    'electric-motor.png',
+    'real-001.jpg',
+    'real-002.jpg',
+    'real-003.jpg',
+    'real-004.jpg',
+    'real-005.jpg',
+    'real-010.jpg',
+    'real-011.jpg',
+    'real-013.jpg',
+    'real-017.jpg',
+    'real-021.jpg',
+]
 
 const createDemoProducts = (count: number): Product[] => {
     const products: Product[] = []
@@ -74,7 +97,9 @@ const createDemoProducts = (count: number): Product[] => {
         DEMO_PRODUCT_CATEGORY_MAP[productId] = categoryId
 
         // Real photo placeholders (no SVG)
-        const imageUrl = `https://loremflickr.com/400/400/engine,car,garage?lock=${i + 1}`
+        const imageFile =
+            DEMO_IMAGE_POOL[i % DEMO_IMAGE_POOL.length] || 'real-001.jpg'
+        const imageUrl = `/demo-products/${imageFile}`
 
         products.push({
             id: productId,

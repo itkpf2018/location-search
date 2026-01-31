@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { SearchBar } from '@/components/search/SearchBar'
 import { SearchResults } from '@/components/search/SearchResults'
 import { StorageGrid } from '@/components/grid/StorageGrid'
+import ProductModal from '@/components/products/ProductModal'
 import { Loading } from '@/components/ui/Loading'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useGridConfig } from '@/hooks/useGridConfig'
@@ -22,6 +23,7 @@ export default function HomePage() {
     const [isSearching, setIsSearching] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+    const [modalProduct, setModalProduct] = useState<Product | null>(null)
 
     // Fetch all products on mount
     useEffect(() => {
@@ -62,6 +64,7 @@ export default function HomePage() {
             setSearchResults(fetched)
             if (fetched.length === 1) {
                 setHighlightedProduct(fetched[0])
+                setModalProduct(fetched[0])
             } else {
                 setHighlightedProduct(null)
             }
@@ -73,14 +76,19 @@ export default function HomePage() {
         }
     }
 
-    const handleSelectProduct = (product: Product) => {
+    const openProductModal = (product: Product) => {
         setHighlightedProduct(product)
+        setModalProduct(product)
+    }
+
+    const handleSelectProduct = (product: Product) => {
+        openProductModal(product)
     }
 
     const handleProductFound = (product: Product) => {
         setSearchQuery(product.name)
         setSearchResults([product])
-        setHighlightedProduct(product)
+        openProductModal(product)
     }
 
     if (isLoading) {
@@ -169,6 +177,7 @@ export default function HomePage() {
                             products={products}
                             highlightedProduct={highlightedProduct}
                             onProductsUpdate={setProducts}
+                            onRequestModal={openProductModal}
                         />
                     </div>
                 </div>
@@ -180,6 +189,12 @@ export default function HomePage() {
                     <p>{th.footer.copyright}</p>
                 </div>
             </footer>
+            <ProductModal
+                product={modalProduct}
+                products={products}
+                onClose={() => setModalProduct(null)}
+                onProductSelect={openProductModal}
+            />
         </div>
     )
 }

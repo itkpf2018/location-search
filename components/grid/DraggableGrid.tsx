@@ -1,10 +1,9 @@
 'use client'
 
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DroppableStateSnapshot, DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { Undo, Redo, History } from 'lucide-react'
 import { Slot } from './Slot'
-import { SlotTooltip } from './SlotTooltip'
 import th from '@/lib/i18n/th'
 import type { Product } from '@/lib/types'
 import type { MoveHistory } from '@/lib/types-advanced'
@@ -17,6 +16,7 @@ interface DraggableGridProps {
     products: Product[]
     onProductsUpdate: (products: Product[]) => void
     highlightedProductId?: string | null
+    onRequestModal?: (product: Product) => void
 }
 
 export function DraggableGrid({
@@ -25,11 +25,11 @@ export function DraggableGrid({
     slotsPerRow,
     products,
     onProductsUpdate,
-    highlightedProductId
+    highlightedProductId,
+    onRequestModal,
 }: DraggableGridProps) {
     const lastScrolledProductRef = useRef<string | null>(null)
     const [moveHistory, setMoveHistory] = useState<MoveHistory[]>([])
-    const [activeTooltipId, setActiveTooltipId] = useState<string | null>(null)
     const [historyIndex, setHistoryIndex] = useState(-1)
 
     const canUndo = historyIndex >= 0
@@ -235,7 +235,19 @@ export function DraggableGrid({
         }
     }, [canRedo, moveHistory, historyIndex, products, onProductsUpdate])
 
-    const boxProducts = products.filter(p => p.box_no === boxNo)
+    const productLookup = useMemo(() => {
+        const map = new Map<string, Product>()
+        products.forEach((p) => {
+            if (p.box_no !== boxNo) return
+            map.set(`${p.row_no}-${p.slot_no}`, p)
+        })
+        return map
+    }, [products, boxNo])
+
+    const boxProducts = useMemo(
+        () => products.filter((p) => p.box_no === boxNo),
+        [products, boxNo]
+    )
 
     useEffect(() => {
         if (!highlightedProductId) {
@@ -316,12 +328,9 @@ export function DraggableGrid({
                                     {Array.from({ length: slotsPerRow }, (_, slotIndex) => {
                                         const slotNo = slotIndex + 1
                                         const slotId = `${boxNo}-${rowNo}-${slotNo}`
+                                        const product = productLookup.get(`${rowNo}-${slotNo}`)
 
-                                    const product = products.find(
-                                        p => p.box_no === boxNo && p.row_no === rowNo && p.slot_no === slotNo
-                                    )
-
-                                    return (
+                                        return (
                                         <Droppable key={slotId} droppableId={slotId}>
                                             {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                                                 <div
@@ -332,18 +341,14 @@ export function DraggableGrid({
                                                 >
                                                     {product ? (
                                                         <Draggable draggableId={product.id} index={slotIndex}>
-                                                            {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                                                                <div
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    {...provided.dragHandleProps}
-                                                                    className={snapshot.isDragging ? 'opacity-50 scale-105 z-50' : ''}
-                                                                    onClick={() => {
-                                                                        setActiveTooltipId((prev) =>
-                                                                            prev === product.id ? null : product.id
-                                                                        )
-                                                                    }}
-                                                                >
+                                            {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className={snapshot.isDragging ? 'opacity-50 scale-105 z-50' : ''}
+                                                            onClick={() => onRequestModal?.(product)}
+                                                        >
                                                                     <Slot
                                                                         boxNo={boxNo}
                                                                         rowNo={rowNo}
@@ -361,12 +366,6 @@ export function DraggableGrid({
                                                             slotNo={slotNo}
                                                             product={undefined}
                                                             isHighlighted={false}
-                                                        />
-                                                    )}
-                                                    {product && (
-                                                        <SlotTooltip
-                                                            product={product}
-                                                            isActive={activeTooltipId === product.id}
                                                         />
                                                     )}
                                                     {provided.placeholder}

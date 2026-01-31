@@ -55,7 +55,7 @@ export function ThemeToggle({ className, compact = false }: { className?: string
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-50 text-primary-600 dark:bg-slate-800 dark:text-primary-300">
                 {mode === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </span>
-            {!compact && <span>{mode === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง'}</span>}
+            {!compact && <span>{mode === 'dark' ? 'Dark' : 'Light'}</span>}
         </button>
     )
 }

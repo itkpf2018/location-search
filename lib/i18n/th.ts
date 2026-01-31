@@ -28,8 +28,8 @@ export const th = {
 
     // Home Page
     home: {
-        title: 'ระบบค้นหาตำแหน่งสินค้า',
-        subtitle: 'ค้นหาสินค้าได้ทันทีด้วยแผนที่ตำแหน่งแบบ Visual',
+        title: 'Vector Vault Search',
+        subtitle: '',
         searchPlaceholder: 'พิมพ์ชื่อสินค้าเพื่อค้นหา...',
         searchResults: 'ผลการค้นหา',
         noResults: 'ไม่พบสินค้าที่ค้นหา',
